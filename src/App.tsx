@@ -1,8 +1,25 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+import { getImages } from './services/imageService';
+import { Image } from './types/data';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  const [images, setImages] = useState<Image[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const imagesData = await getImages();
+        setImages(imagesData);
+      } catch (error) {
+        console.error("Error fetching data", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
