@@ -12,7 +12,7 @@ This project is a simple React application that fetches and displays images usin
 
 1. Clone the repository:
     ```bash
-    git clone 
+    git clone git@github.com:r0valdez/react-image-gallery.git
     cd react-image-gallery
     ```
 
