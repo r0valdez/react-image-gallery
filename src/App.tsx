@@ -1,19 +1,23 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getImages } from './services/imageService';
 import { Image } from './types/data';
-import logo from './logo.svg';
-import './App.css';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
-function App() {
+const App: React.FC = () => {
   const [images, setImages] = useState<Image[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
         const imagesData = await getImages();
         setImages(imagesData);
       } catch (error) {
         console.error("Error fetching data", error);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -21,23 +25,25 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Box padding={2}>
+      <h1>Images</h1>
+      {loading ? (
+        <Box display="flex" justifyContent="center" alignItems="center">
+          <CircularProgress />
+        </Box>
+      ) : (
+        <Box display="flex" flexWrap="wrap">
+          {images.map((image) => (
+            <Box key={image.id} margin={1}>
+              <img src={image.url} alt={image.title} width={image.width} height={image.height} />
+              <h2>{image.title}</h2>
+              <p>{image.description}</p>
+            </Box>
+          ))}
+        </Box>
+      )}
+    </Box>
   );
-}
+};
 
 export default App;
